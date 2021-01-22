@@ -1,0 +1,55 @@
+print(constants.defaultRegion)
+print(constants.space1Region)
+
+local function toggleMenu(self, toggle)
+	if toggle == "newgame" then
+		gui.set_enabled(gui.get_node("btnMedieval"), true)
+		gui.set_enabled(gui.get_node("btnSpace"), true)
+		gui.set_enabled(gui.get_node("btnBack"), true)
+		
+		gui.set_enabled(gui.get_node("btnNewGame"), false)
+		gui.set_enabled(gui.get_node("btnSave"), false)
+	elseif toggle == "mainmenu" then
+		gui.set_enabled(gui.get_node("btnMedieval"), false)
+		gui.set_enabled(gui.get_node("btnSpace"), false)
+		gui.set_enabled(gui.get_node("btnBack"), false)
+		
+		gui.set_enabled(gui.get_node("btnNewGame"), true)
+		gui.set_enabled(gui.get_node("btnSave"), true)
+	end
+end
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	toggleMenu(self, "mainmenu")
+end
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("left-click") and action.pressed then
+		if gui.pick_node(gui.get_node("btnMedieval"), action.x, action.y) then
+			msg.post("main:/GameManager#main", "load_game", { region=constants.defaultRegion })
+		elseif gui.pick_node(gui.get_node("btnSpace"), action.x, action.y) then
+			msg.post("main:/GameManager#main", "load_game", { region=constants.space1Region })
+		elseif gui.pick_node(gui.get_node("btnNewGame"), action.x, action.y) then
+			toggleMenu(self, "newgame")
+		elseif gui.pick_node(gui.get_node("btnBack"), action.x, action.y) then
+			toggleMenu(self, "mainmenu")
+		end
+	end
+end

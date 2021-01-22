@@ -1,0 +1,42 @@
+constants = require("main/constants")
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
+end
+
+function on_input(self, action_id, action)
+
+end
+
+function on_message(self, message_id, message, sender)
+	-- print(message_id)
+	-- pprint(message)
+	-- print(sender)
+	if message_id == hash("load_game") then
+		--sound.stop("/bkgmusic#sound")
+		--print("init game with " .. message.playerName)
+		local proxyName = "/proxyManager#" .. message.region
+		msg.post(proxyName, "load")
+		--msg.post("/proxyManager#mainProxy", "unload")
+	elseif message_id == hash("proxy_loaded") then
+		--print("proxy loaded " .. sender)
+		msg.post(sender, "init")
+		msg.post(sender, "enable")
+		msg.post("menu", "disable")
+
+		local mainUrl = msg.url("GameManager:/proxyManager#mainProxy")
+		local battlefieldUrl = msg.url("main:/proxyManager#battlefieldProxy")
+		if sender == mainUrl then
+			--print("loading player with " .. self.playerName)
+			--msg.post("main:/gameRunner#main", "load-player", { playerName = self.playerName })
+		elseif sender == battlefieldUrl then
+			msg.post(sender, "acquire_input_focus")
+		end
+ 	elseif message_id == hash("proxy_unloaded") then
+		--msg.post(sender, message_id)
+		-- elseif message_id == hash("game-over-defeat") then
+		-- 	msg.post("#mainProxy", "unload")
+		-- 	msg.post("#defeatproxy", "load")
+	end
+end

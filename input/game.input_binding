@@ -1,0 +1,20 @@
+key_trigger {
+  input: KEY_1
+  action: "attack1"
+}
+key_trigger {
+  input: KEY_2
+  action: "attack2"
+}
+key_trigger {
+  input: KEY_3
+  action: "attack3"
+}
+mouse_trigger {
+  input: MOUSE_BUTTON_LEFT
+  action: "touch"
+}
+mouse_trigger {
+  input: MOUSE_BUTTON_LEFT
+  action: "left-click"
+}
