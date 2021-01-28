@@ -10,6 +10,10 @@ key_trigger {
   input: KEY_3
   action: "attack3"
 }
+key_trigger {
+  input: KEY_R
+  action: "rotate"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_LEFT
   action: "touch"

@@ -27,10 +27,11 @@ function on_message(self, message_id, message, sender)
 
 		local mainUrl = msg.url("GameManager:/proxyManager#mainProxy")
 		local battlefieldUrl = msg.url("main:/proxyManager#battlefieldProxy")
+		local space1Url = msg.url("main:/proxyManager#space1Proxy")
 		if sender == mainUrl then
 			--print("loading player with " .. self.playerName)
 			--msg.post("main:/gameRunner#main", "load-player", { playerName = self.playerName })
-		elseif sender == battlefieldUrl then
+		elseif sender == battlefieldUrl or sender == space1Url then
 			msg.post(sender, "acquire_input_focus")
 		end
  	elseif message_id == hash("proxy_unloaded") then

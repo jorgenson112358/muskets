@@ -1,0 +1,98 @@
+local task_gather_ore = hash("collect_ore")
+local task_return_home = hash("return_home")
+local task_gathering_ore = hash("chop_wood")
+
+function init(self)
+	self.currentTask = nil
+	self.targetPosition = nil
+	self.collectionPoint = vmath.vector3(450, 600, go.get_position().z)
+	self.homeBase = vmath.vector3(140, 500, go.get_position().z)
+	self.chopTimeDuration = 3
+	self.chopTime = 0
+	self.speed = 50
+	self.animation = hash("idle")
+	self.maxHealth = 30
+	self.health = self.maxHealth
+	self.woodCollectionAmount = 10
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+local function rotateShip(target)
+	local to = go.get_position()
+	local from = vmath.vector3(target.x, target.y, 0)
+	local angle = math.atan2(to.x - from.x, from.y - to.y)
+	rotation = vmath.quat_rotation_z(angle)
+	go.set_rotation(rotation)
+end
+
+local function move_done(self)
+	if self.currentTask == task_gather_ore then
+		self.currentTask = task_gathering_ore
+		self.targetPosition = nil
+		self.chopTime = self.chopTimeDuration
+	elseif self.currentTask == task_return_home then
+		--msg.post("main#script", "resource_collected", { resource = "wood", amount = self.woodCollectionAmounnt })
+		self.currentTask = task_gather_ore
+		self.targetPosition = self.collectionPoint
+		rotateShip(self.targetPosition)
+	end
+end
+
+function update(self, dt)
+	local anim = hash("move")
+	if self.currentTask == nil then
+		self.currentTask = task_gather_ore
+		self.targetPosition = self.collectionPoint
+		rotateShip(self.targetPosition)
+	elseif self.currentTask == task_gathering_ore then
+		anim = hash("gather")
+		self.chopTime = self.chopTime - dt
+		if self.chopTime < 0 then
+			self.currentTask = task_return_home
+			self.targetPosition = self.homeBase
+			rotateShip(self.targetPosition)
+			anim = hash("move")
+		end
+	end
+
+	if self.targetPosition ~= nil then
+		local currentPosition = go.get_position()
+		local distance = vmath.length(self.targetPosition - currentPosition)
+		local duration = distance / self.speed
+		go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, self.targetPosition, go.EASING_LINEAR, duration, 0, move_done)
+	end
+
+	if self.animation ~= anim then
+		self.animation = anim
+		msg.post("#sprite", "play_animation", { id = anim})
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

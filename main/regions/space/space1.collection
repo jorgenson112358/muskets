@@ -1,4 +1,144 @@
 name: "default"
+instances {
+  id: "spacefighter"
+  prototype: "/main/armies/space/spacefighter.go"
+  position {
+    x: 200.0
+    y: 600.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.4
+    y: 0.4
+    z: 1.0
+  }
+}
+instances {
+  id: "spacestation"
+  prototype: "/main/armies/space/spacestation.go"
+  position {
+    x: 100.0
+    y: 500.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "enemystation"
+  prototype: "/main/armies/space/enemystation.go"
+  position {
+    x: 1140.0
+    y: 520.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "asteroid1"
+  prototype: "/main/regions/space/asteroid1.go"
+  position {
+    x: 400.0
+    y: 150.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "asteroid2"
+  prototype: "/main/regions/space/asteroid2.go"
+  position {
+    x: 550.0
+    y: 600.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "oreminer"
+  prototype: "/main/armies/space/oreminer.go"
+  position {
+    x: 200.0
+    y: 700.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.25
+    y: 0.25
+    z: 1.0
+  }
+}
+instances {
+  id: "oreminer1"
+  prototype: "/main/armies/space/oreminer.go"
+  position {
+    x: 200.0
+    y: 200.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.25
+    y: 0.25
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "bkg"
@@ -6,7 +146,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/main/regions/space/space-bkg.atlas\\\"\\n"
-  "default_animation: \\\"planet-galaxy\\\"\\n"
+  "default_animation: \\\"planets\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
