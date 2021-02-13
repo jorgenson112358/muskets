@@ -2,7 +2,7 @@ targetPosition = nil
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-
+	
 	self.speed = 120
 	self.animation = nil
 	self.faceLeft = true

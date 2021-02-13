@@ -1,0 +1,99 @@
+local eszkaat_attack = hash("eszkaat_attack")
+local eszkaat_patrol_out = hash("eszkaat_patrol_out")
+local eszkaat_patrol_home = hash("eszkaat_patrol_home")
+
+function init(self)
+	self.currentTask = nil
+	self.nextTask = nil
+	self.targetPosition = nil
+	self.nextTarget = nil
+	self.patrolPoint = vmath.vector3(900, 300, go.get_position().z)
+	self.homeBase = vmath.vector3(1000, 500, go.get_position().z)
+	self.speed = 50
+	self.animation = nil
+	self.maxHealth = 30
+	self.health = self.maxHealth
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+local function rotateSaucerShip(target)
+	local to = go.get_position()
+	local from = vmath.vector3(target.x, target.y, 0)
+	local angle = math.atan2(to.x - from.x, from.y - to.y)
+	rotation = vmath.quat_rotation_z(angle)
+	go.set_rotation(rotation)
+end
+
+local function move_done(self)
+	if self.currentTask == eszkaat_patrol_out then
+		self.nextTask = eszkaat_patrol_home
+		self.nextTarget = self.homeBase
+	elseif self.currentTask == eszkaat_patrol_home then
+		self.nextTask = eszkaat_patrol_out
+		self.nextTarget = self.patrolPoint
+	end
+end
+
+local function fly(target, speed)
+	local currentPosition = go.get_position()
+	local distance = vmath.length(target - currentPosition)
+	local duration = distance / speed
+	rotateSaucerShip(target)
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target, go.EASING_LINEAR, duration, 0, move_done)
+end
+
+function update(self, dt)
+	local anim = hash("idle")
+	if self.currentTask == nil then
+		anim = hash("move")
+		self.currentTask = eszkaat_patrol_out
+		self.targetPosition = self.patrolPoint
+		fly(self.targetPosition, self.speed)
+	elseif self.nextTask ~= nil then
+		anim = hash("move")
+		self.currentTask = self.nextTask
+		self.targetPosition = self.nextTarget
+		self.nextTask = nil
+		fly(self.targetPosition, self.speed)
+	end
+
+	if self.currentTask == eszkaat_patrol_home 
+	or self.currentTask == eszkaat_patrol_out
+	or self.currentTask == eszkaat_attack then
+		anim = hash("move")
+	end
+
+	if self.animation ~= anim then
+		self.animation = anim
+		msg.post("#sprite", "play_animation", { id = anim})
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

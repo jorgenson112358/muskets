@@ -139,6 +139,26 @@ instances {
     z: 1.0
   }
 }
+instances {
+  id: "eszkaat-saucer"
+  prototype: "/main/armies/space/eszkaat-saucer.go"
+  position {
+    x: 1000.0
+    y: 500.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.4
+    y: 0.4
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "bkg"
