@@ -6,6 +6,10 @@ images {
   image: "/assets/images/Spaceships2/junk/spacestation2.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/assets/images/space/player-laser.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "move"
   images {

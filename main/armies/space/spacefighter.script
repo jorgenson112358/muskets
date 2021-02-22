@@ -1,5 +1,9 @@
 targetPosition = nil
 
+action_move = hash("move")
+action_attack = hash("attack")
+action_attack_move = hash("attack_move")
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	
@@ -8,6 +12,13 @@ function init(self)
 	self.faceLeft = true
 	self.attacking = false
 	self.attack_anim = nil
+	self.firingLaser = false
+	self.currentAction = nil
+	self.lastTarget = nil
+	self.attackCooldown = 1
+	self.attackCooldownTimer = 0
+
+	math.randomseed(os.time())
 end
 
 function final(self)
@@ -32,17 +43,34 @@ end
 
 function update(self, dt)
 	sprite.set_hflip("#sprite", self.faceLeft)
-
+	local currentPosition = go.get_position()
 	local anim = hash("idle")
-	if self.targetPosition ~= nil then
-		local currentPosition = go.get_position()
+	
+	if (self.currentAction == action_move or self.currentAction == action_attack_move) and self.targetPosition ~= nil then	
 		local distance = vmath.length(self.targetPosition - currentPosition)
 		local duration = distance / self.speed
 		go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, self.targetPosition, go.EASING_LINEAR, duration, 0, move_done)
 		anim = hash("move")
 	end
 
-	if self.attacking == false and self.animation ~= anim then
+	-- fire if coolDown over
+	if self.currentAction == action_attack_move and self.lastTarget ~= nil then
+		if self.attackCooldownTimer == 0 then
+			local playerDir = vmath.normalize(self.lastTarget - currentPosition)
+			local angle = math.atan2(playerDir.y, playerDir.x)
+			local rot = vmath.quat_rotation_z(angle)
+			local props = { dir = playerDir }
+			factory.create("#laserFactory", nil, rot, props)
+			self.attackCooldownTimer = self.attackCooldown
+		else
+			self.attackCooldownTimer = self.attackCooldownTimer - dt
+			if self.attackCooldownTimer <= 0 then
+				self.attackCooldownTimer = 0
+			end
+		end
+	end
+
+	if self.animation ~= anim then
 		self.animation = anim
 		msg.post("#sprite", "play_animation", { id = anim})
 	end
@@ -55,15 +83,18 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("touch") and action.pressed then
+	if (action_id == hash("touch") or action_id == hash("attack-move")) and action.pressed then
 		self.targetPosition = vmath.vector3(action.x, action.y, go.get_position().z)
-		local temp = self.targetPosition - go.get_position()
+		self.lastTarget = self.targetPosition
 		rotateShip(self.targetPosition)
-	elseif (action_id == hash("attack1") or action_id == hash("attack2") or action_id == hash("attack3") ) and action.pressed then
-		if self.attacking == false and self.animation ~= action_id then
-			self.attacking = true
-			self.animation = action_id
-			sprite.play_flipbook("#sprite", action_id, attack_done)
+		if action_id == hash("touch") then
+			self.currentAction = action_move
+		elseif action_id == hash("attack-move") then
+			self.currentAction = action_attack_move
 		end
+	elseif action_id == hash("pstate_attack") and action.pressed then
+		self.currentAction = action_attack
+	elseif action_id == hash("pstate_move") and action.pressed then
+		self.currentAction = action_move
 	end
 end

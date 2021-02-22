@@ -1,18 +1,14 @@
 key_trigger {
-  input: KEY_1
-  action: "attack1"
+  input: KEY_SPACE
+  action: "attack"
 }
 key_trigger {
-  input: KEY_2
-  action: "attack2"
+  input: KEY_M
+  action: "pstate_move"
 }
 key_trigger {
-  input: KEY_3
-  action: "attack3"
-}
-key_trigger {
-  input: KEY_R
-  action: "rotate"
+  input: KEY_A
+  action: "pstate_attack"
 }
 mouse_trigger {
   input: MOUSE_BUTTON_LEFT
@@ -21,4 +17,8 @@ mouse_trigger {
 mouse_trigger {
   input: MOUSE_BUTTON_LEFT
   action: "left-click"
+}
+mouse_trigger {
+  input: MOUSE_BUTTON_RIGHT
+  action: "attack-move"
 }
