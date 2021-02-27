@@ -1,4 +1,4 @@
-constants = require("main/constants")
+local constants = require("main/constants")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")

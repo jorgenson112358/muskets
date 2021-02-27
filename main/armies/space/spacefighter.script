@@ -56,12 +56,18 @@ function update(self, dt)
 	-- fire if coolDown over
 	if self.currentAction == action_attack_move and self.lastTarget ~= nil then
 		if self.attackCooldownTimer == 0 then
-			local playerDir = vmath.normalize(self.lastTarget - currentPosition)
-			local angle = math.atan2(playerDir.y, playerDir.x)
-			local rot = vmath.quat_rotation_z(angle)
-			local props = { dir = playerDir }
-			factory.create("#laserFactory", nil, rot, props)
-			self.attackCooldownTimer = self.attackCooldown
+			local tempV3 = self.lastTarget - currentPosition
+			if vmath.length(tempV3) > 0 then
+				local playerDir = vmath.normalize(tempV3)
+				--print("playerDir -> ", playerDir)
+				local angle = math.atan2(playerDir.y, playerDir.x)
+				local rot = vmath.quat_rotation_z(angle)
+				local props = { dir = playerDir }
+				factory.create("#laserFactory", nil, rot, props)
+				self.attackCooldownTimer = self.attackCooldown
+			else
+				--print("arrived at destination")
+			end
 		else
 			self.attackCooldownTimer = self.attackCooldownTimer - dt
 			if self.attackCooldownTimer <= 0 then

@@ -1,0 +1,35 @@
+local constants = require("main/constants")
+
+function init(self)
+	self.minerScale = vmath.vector3(0.25, 0.25, 1.0)
+	self.minerSpawnPos = vmath.vector3(200, 500, 1)
+
+	self.sabreScale = vmath.vector3(0.4, 0.4, 1.0)
+	self.sabreSpawnPos = vmath.vector3(95, 430, 1)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == constants.cmdBuildMiner then
+		print("spawning miner")
+		factory.create("/MinerFactory#factory", self.minerSpawnPos, nil, nil, self.minerScale)
+	elseif message_id == constants.cmdBuildSabre then
+		print("spawning sabre")
+		factory.create("/SabreFactory#factory", self.sabreSpawnPos, nil, nil, self.sabreScale)
+	elseif message_id == constants.cmdRepairStation then
+		print("repairing")
+	else
+		print("wut?")
+	end
+end

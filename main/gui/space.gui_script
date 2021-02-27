@@ -1,0 +1,60 @@
+local constants = require("main/constants")
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	self.messageExpireTime = 4
+	self.removeMessageTime = self.messageExpireTime
+	self.messageBoardUpdated = false
+	self.msgBoardName = "txtMessageBox"
+end
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+
+local function set_msg(self, nodeName, msg)
+	if nodeName == self.msgBoardName then
+		self.messageBoardUpdated = true
+		self.removeMessageTime = self.messageExpireTime
+	end
+
+	local node = gui.get_node(nodeName)
+	gui.set_text(node, msg)	
+end
+
+function update(self, dt)
+	if self.messageBoardUpdated == true then
+		self.removeMessageTime = self.removeMessageTime - dt
+
+		if self.removeMessageTime < 0 then
+			self.messageBoardUpdated = false
+			set_msg(self, self.msgBoardName, "")
+		end
+	end
+	
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("left-click") and action.pressed then
+		local buildMiner = gui.get_node("btnBuildMiner")
+		local buildSabre = gui.get_node("btnBuildSabre")
+		local repairStation = gui.get_node("btnRepairStation")
+
+		if gui.pick_node(buildMiner, action.x, action.y) then
+			set_msg(self, self.msgBoardName, "Building Ore Miner")
+			msg.post(constants.GameRunnerScript, constants.cmdBuildMiner)
+		elseif  gui.pick_node(buildSabre, action.x, action.y) then
+			set_msg(self, self.msgBoardName, "Building Sabre")
+			msg.post(constants.GameRunnerScript, constants.cmdBuildSabre)
+		elseif  gui.pick_node(repairStation, action.x, action.y) then
+			set_msg(self, self.msgBoardName, "Repairing space station")
+			msg.post(constants.GameRunnerScript, constants.cmdRepairStation)
+		end
+	end
+end

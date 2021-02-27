@@ -1,3 +1,4 @@
+local constants = require("main/constants")
 print(constants.defaultRegion)
 print(constants.space1Region)
 
