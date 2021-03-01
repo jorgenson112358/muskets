@@ -7,16 +7,26 @@ local function toggleMenu(self, toggle)
 		gui.set_enabled(gui.get_node("btnMedieval"), true)
 		gui.set_enabled(gui.get_node("btnSpace"), true)
 		gui.set_enabled(gui.get_node("btnBack"), true)
-		
+		gui.set_enabled(gui.get_node("txtMedieval"), true)
+		gui.set_enabled(gui.get_node("txtSpace"), true)
+		gui.set_enabled(gui.get_node("txtBack"), true)
+				
 		gui.set_enabled(gui.get_node("btnNewGame"), false)
 		gui.set_enabled(gui.get_node("btnSave"), false)
+		gui.set_enabled(gui.get_node("txtNew"), false)
+		gui.set_enabled(gui.get_node("txtSave"), false)
 	elseif toggle == "mainmenu" then
 		gui.set_enabled(gui.get_node("btnMedieval"), false)
 		gui.set_enabled(gui.get_node("btnSpace"), false)
 		gui.set_enabled(gui.get_node("btnBack"), false)
-		
+		gui.set_enabled(gui.get_node("txtMedieval"), false)
+		gui.set_enabled(gui.get_node("txtSpace"), false)
+		gui.set_enabled(gui.get_node("txtBack"), false)
+				
 		gui.set_enabled(gui.get_node("btnNewGame"), true)
 		gui.set_enabled(gui.get_node("btnSave"), true)
+		gui.set_enabled(gui.get_node("txtNew"), true)
+		gui.set_enabled(gui.get_node("txtSave"), true)
 	end
 end
 
