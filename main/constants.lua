@@ -10,5 +10,6 @@ M.cmdBuildMiner = hash("build-miner")
 M.cmdBuildSabre = hash("build-sabre")
 M.cmdRepairStation = hash("repair-station")
 M.GameRunnerScript = "/GameRunner#space"
+M.msgResourceCollected = hash("resource-collected")
 
 return M

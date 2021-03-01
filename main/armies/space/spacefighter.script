@@ -17,6 +17,8 @@ function init(self)
 	self.lastTarget = nil
 	self.attackCooldown = 1
 	self.attackCooldownTimer = 0
+	self.shiverRounds = 10
+	self.needsToShiver = false
 
 	math.randomseed(os.time())
 end
@@ -27,6 +29,7 @@ end
 
 local function move_done(self)
 	self.targetPosition = nil
+	self.needsToShiver = true
 end
 
 local function attack_done (self)
@@ -39,6 +42,17 @@ local function rotateShip(target)
 	local angle = math.atan2(to.x - from.x, from.y - to.y)
 	rotation = vmath.quat_rotation_z(angle)
 	go.set_rotation(rotation)
+end
+
+function shiverIdleLocation(self)
+	local xShiver = math.random(-20, 20)
+	local yShiver = math.random(-20, 20)
+	local shiverLocation = go.get_position() + vmath.vector3(xShiver, yShiver, 0)
+	local duration = 1
+	print("new loc", shiverLocation)
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, shiverLocation, go.EASING_LINEAR, duration, 0)
+
+	self.needsToShiver = false
 end
 
 function update(self, dt)
@@ -79,6 +93,10 @@ function update(self, dt)
 	if self.animation ~= anim then
 		self.animation = anim
 		msg.post("#sprite", "play_animation", { id = anim})
+	end
+
+	if anim == hash("idle") and self.needsToShiver == true then
+		shiverIdleLocation(self)
 	end
 end
 
