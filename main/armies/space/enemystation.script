@@ -1,0 +1,70 @@
+function init(self)
+	self.attackCooldown = 1
+	self.attackCooldownTimer = 0
+	self.attacking = false
+	self.attackTarget = nil
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function enemystation_attack(self, currentPosition, targetPosition, dt)
+	if self.attackCooldownTimer == 0 then
+		--print("cooldown done, shooting", currentPosition, targetPosition)
+		local tempV3 = targetPosition - currentPosition
+		--print(tempV3)
+		if vmath.length(tempV3) > 0 then
+			--print("math success")
+			local playerDir = vmath.normalize(tempV3)
+			local angle = math.atan2(playerDir.y, playerDir.x)
+			local rot = vmath.quat_rotation_z(angle)
+			local props = { dir = playerDir }
+			factory.create("#rocketFactory", nil, rot, props)
+			self.attackCooldownTimer = self.attackCooldown
+		end
+	end
+end
+
+function update(self, dt)
+	if self.attackCooldownTimer > 0 then
+		self.attackCooldownTimer = self.attackCooldownTimer - dt
+		--print("cooling", self.attackCooldownTimer)
+		if self.attackCooldownTimer <= 0 then
+			self.attackCooldownTimer = 0
+		end
+	end
+	if self.attackCooldownTimer == 0 and self.attacking == true then
+		--print("attacking")
+		enemystation_attack(self, go.get_position(), self.attackTarget, dt)
+		--self.attacking = false
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collision_response") then
+		--print("Enemy station collision response with player")
+		self.attackTarget = message.other_position
+		self.attacking = true
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

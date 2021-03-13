@@ -1,0 +1,21 @@
+go.property("dir", vmath.vector3())
+
+function init(self)
+	self.speed = 200
+	self.damage = 3
+end
+
+function update(self, dt)
+	local pos = go.get_position()
+	pos = pos + self.dir * self.speed * dt
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collision_response") then
+		--go.delete(message.other_id)
+		--msg.post("/gui#ui", "add_score", {score = 100})
+		msg.post(message.other_id, hash("hit-by-rocket"), { dmg = self.damage } )
+		go.delete()
+	end
+end
