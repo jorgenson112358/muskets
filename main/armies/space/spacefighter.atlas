@@ -14,6 +14,10 @@ images {
   image: "/assets/images/space/rocket.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/assets/images/space/eszkaat-explosion-ring.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "move"
   images {

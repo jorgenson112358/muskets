@@ -110,6 +110,7 @@ embedded_components {
   "group: \"player\"\n"
   "mask: \"enemy\"\n"
   "mask: \"enemystation\"\n"
+  "mask: \"eszkaatrocket\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

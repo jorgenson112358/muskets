@@ -76,7 +76,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("collision_response") then
-		print("Eszkaat saucer collision response from ", message.other_id)
+		--print("Eszkaat saucer collision response from ", message.other_id)
 	end
 end
 

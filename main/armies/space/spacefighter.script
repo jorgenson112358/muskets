@@ -6,17 +6,16 @@ action_attack_move = hash("attack_move")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	
+
+	--ship stats
 	self.speed = 120
+	self.health = 10
+	
 	self.animation = nil
 	self.faceLeft = true
 	self.attacking = false
 	self.attack_anim = nil
-	self.firingLaser = false
 	self.currentAction = nil
-	self.lastTarget = nil
-	self.attackCooldown = 1
-	self.attackCooldownTimer = 0
 	self.shiverRounds = 10
 	self.needsToShiver = false
 
@@ -24,7 +23,11 @@ function init(self)
 	self.hasEnemyTarget = nil
 	self.stopMoving = false
 	self.attackTarget = nil
-
+	self.firingLaser = false
+	self.lastTarget = nil
+	self.attackCooldown = 1
+	self.attackCooldownTimer = 0
+	
 	math.randomseed(os.time())
 end
 
@@ -121,13 +124,19 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") then
 		local enemyPosition = go.get_position(message.other_id)
 		if message.enter == true then
-			print("Sabre collision response with enemy")
+			--print("Sabre collision response with enemy")
 			self.attackTarget = enemyPosition
 			self.currentAction = action_attack
 		else
-			print("trigger end")
-			self.currentAction = action_attack_move
-			self.targetPosition = enemyPosition
+			-- --this needs to maintain distance somehow and now move to enemy location
+			-- print("trigger end")
+			-- self.currentAction = action_attack_move
+			-- self.targetPosition = enemyPosition
+		end
+	elseif message_id == hash("take-damage") then
+		self.health = self.health - message.damage
+		if self.health <= 0 then
+			go.delete()
 		end
 	end
 end

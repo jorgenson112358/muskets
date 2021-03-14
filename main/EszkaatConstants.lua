@@ -4,11 +4,6 @@
 -- in any script using the functions.
 local M = {}
 
-M.ore = 150
-M.MinerCost = 12
-M.SabreCost = 35
-
-M.SabreHealth = 10
 M.SpaceStationHealth = 250
 
 return M

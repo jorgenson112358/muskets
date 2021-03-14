@@ -22,7 +22,8 @@ function enemystation_attack(self, currentPosition, targetPosition, dt)
 			local angle = math.atan2(playerDir.y, playerDir.x)
 			local rot = vmath.quat_rotation_z(angle)
 			local props = { dir = playerDir }
-			factory.create("#rocketFactory", nil, rot, props)
+			local scaling = 0.28
+			factory.create("#rocketFactory", nil, rot, props, scaling)
 			self.attackCooldownTimer = self.attackCooldown
 		end
 	end
